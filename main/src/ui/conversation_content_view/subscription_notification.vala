@@ -48,6 +48,7 @@ public class SubscriptionNotitication : Object {
         box.append(new Label(_("This contact would like to add you to their contact list")) { margin_end=10 });
         box.append(accept_button);
         box.append(deny_button);
+        conversation_view.remove_notification(box);
         conversation_view.add_notification(box);
     }
 }
