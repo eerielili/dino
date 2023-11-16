@@ -10,6 +10,7 @@ public class SubscriptionNotitication : Object {
     private StreamInteractor stream_interactor;
     private Conversation conversation;
     private ConversationView conversation_view;
+    private bool notif_shown;
 
     public SubscriptionNotitication(StreamInteractor stream_interactor) {
         this.stream_interactor = stream_interactor;
@@ -26,30 +27,34 @@ public class SubscriptionNotitication : Object {
     public void init(Conversation conversation, ConversationView conversation_view) {
         this.conversation = conversation;
         this.conversation_view = conversation_view;
-
+        notif_shown = false;
         if (stream_interactor.get_module(PresenceManager.IDENTITY).exists_subscription_request(conversation.account, conversation.counterpart)) {
             show_notification();
         }
     }
 
     private void show_notification() {
-        Box box = new Box(Orientation.HORIZONTAL, 5);
-        Button accept_button = new Button.with_label(_("Accept"));
-        Button deny_button = new Button.with_label(_("Deny"));
-        GLib.Application app = GLib.Application.get_default();
-        accept_button.clicked.connect(() => {
-            app.activate_action("accept-subscription", conversation.id);
-            conversation_view.remove_notification(box);
-        });
-        deny_button.clicked.connect(() => {
-            app.activate_action("deny-subscription", conversation.id);
-            conversation_view.remove_notification(box);
-        });
-        box.append(new Label(_("This contact would like to add you to their contact list")) { margin_end=10 });
-        box.append(accept_button);
-        box.append(deny_button);
-        conversation_view.remove_notification(box);
-        conversation_view.add_notification(box);
+        if (notif_shown == false) {
+            Box box = new Box(Orientation.HORIZONTAL, 5);
+            Button accept_button = new Button.with_label(_("Accept"));
+            Button deny_button = new Button.with_label(_("Deny"));
+            GLib.Application app = GLib.Application.get_default();
+            accept_button.clicked.connect(() => {
+                app.activate_action("accept-subscription", conversation.id);
+                conversation_view.remove_notification(box);
+                notif_shown = true;
+            });
+            deny_button.clicked.connect(() => {
+                app.activate_action("deny-subscription", conversation.id);
+                conversation_view.remove_notification(box);
+                notif_shown = true;
+            });
+            box.append(new Label(_("This contact would like to add you to their contact list")) { margin_end=10 });
+            box.append(accept_button);
+            box.append(deny_button);
+            conversation_view.add_notification(box);
+            notif_shown = true;
+        }
     }
 }
 
