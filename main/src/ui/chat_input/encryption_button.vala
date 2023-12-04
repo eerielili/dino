@@ -73,6 +73,10 @@ public class EncryptionButton {
 
     private void update_encryption_menu_icon() {
         set_icon(conversation.encryption == Encryption.NONE ? "changes-allow-symbolic" : "changes-prevent-symbolic");
+        string encbtn_bg_color = conversation.encryption == Encryption.NONE ? "#F2EE22" : "transparent";
+        string encbtn_tooltip = conversation.encryption == Encryption.NONE ? _("Your message won't be encrypted. You can click to pick an encryption method.") : _("Your message will be encrypted.") ;
+        menu_button.tooltip_text = Util.string_if_tooltips_active(_(encbtn_tooltip));
+        Util.force_css(menu_button, ".encryption-button {background-color: " + encbtn_bg_color +";border-radius: 15px; margin-bottom:2px; margin-right:2px;}");
     }
 
     private void update_visibility() {

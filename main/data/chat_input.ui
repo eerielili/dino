@@ -72,6 +72,7 @@
                                     <class name="flat"/>
                                     <class name="dino-chatinput-button"/>
                                     <class name="image-button"/>
+                                    <class name="encryption-button"/>
                                 </style>
                             </object>
                         </child>
