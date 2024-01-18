@@ -14,6 +14,7 @@ public class ListRow : Widget {
     public Image status_dot;
     public Label via_label;
 
+    public string? status_str;
     public Jid? jid;
     public Account? account;
 
@@ -50,6 +51,7 @@ public class ListRow : Widget {
                         case "xa": this.status_dot.set_from_icon_name("dino-status-away"); break;
                         case "chat": this.status_dot.set_from_icon_name("dino-status-chat"); break;
                 }
+                status_str = presence_str;
             }
         }
         else status_dot.set_from_icon_name("dino-status-offline");
