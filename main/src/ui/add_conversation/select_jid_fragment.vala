@@ -54,20 +54,20 @@ public class SelectJidFragment : Gtk.Box {
             if (list_row == null) return;
             remove_jid(list_row.child as ListRow);
         });
-      filter_online_button.clicked.connect(() => {
-        if(!filter_online_toggled){
-            filter_online_toggled = true;
-            list.set_filter_func(filter_online);
-            Util.force_css(filter_online_button, "* {border: 2px solid limegreen;}");
-            filter_online_button.set_tooltip_text(_("Only showing online users is toggled on."));
-        }
-        else{
-            filter_online_toggled = false;
+        filter_online_button.clicked.connect(() => {
+            if(!filter_online_toggled){
+                filter_online_toggled = true;
+                Util.force_css(filter_online_button, "* {border: 2px solid limegreen;}");
+                filter_online_button.set_tooltip_text(_("Only showing online users is toggled on."));
+            }
+            else{
+                filter_online_toggled = false;
+                Util.force_css(filter_online_button, "* {border: initial;}");
+                filter_online_button.set_tooltip_text(_("Only showing online users is not toggled on."));
+            }
             list.set_filter_func(filter);
-            Util.force_css(filter_online_button, "* {border: initial;}");
-            filter_online_button.set_tooltip_text(_("Only showing online users is not toggled on."));
-        }
-      });
+            entry.grab_focus();
+        });
     }
 
     public void set_filter(string str) {
@@ -78,7 +78,6 @@ public class SelectJidFragment : Gtk.Box {
 
         filter_values = str == "" ? null : str.split(" ");
         list.invalidate_filter();
-        filter_online_button.sensitive = str.length > 0 ? false : true;
 
         try {
             Jid parsed_jid = new Jid(str);
@@ -122,6 +121,11 @@ public class SelectJidFragment : Gtk.Box {
     private bool filter(ListBoxRow r) {
         ListRow? row = (r.child as ListRow);
         if (row == null) return true;
+        if (filter_online_toggled){
+            if(row.status_str == null){
+                return false;
+            }
+        }
 
         if (filter_values != null) {
             foreach (string filter in filter_values) {
@@ -130,15 +134,6 @@ public class SelectJidFragment : Gtk.Box {
                     return false;
                 }
             }
-        }
-        return true;
-    }
-
-    private bool filter_online(ListBoxRow r){
-        ListRow? row = (r.child as ListRow);
-        if (row == null) return true;
-        if(row.status_str == null){
-            return false;
         }
         return true;
     }
