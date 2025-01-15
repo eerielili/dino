@@ -98,8 +98,9 @@ public class GlobalSearch {
     }
 
     private void on_key_released(uint keyval, uint keycode, Gdk.ModifierType state) {
-        if (keyval == Gdk.Key.Return) {
+        if (keyval == Gdk.Key.Return && search_entry.text.length > 0) {
             auto_complete_list.get_selected_row().activate();
+            auto_complete_list.select_row(auto_complete_list.get_row_at_index(-1));
         }
     }
 
