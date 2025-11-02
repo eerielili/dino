@@ -164,6 +164,7 @@ public class Dino.Ui.Application : Adw.Application, Dino.Application {
             Conversation? conversation = stream_interactor.get_module(ConversationManager.IDENTITY).get_conversation_by_id(variant.get_int32());
             if (conversation == null) return;
             stream_interactor.get_module(PresenceManager.IDENTITY).deny_subscription(conversation.account, conversation.counterpart);
+            stream_interactor.get_module(ConversationManager.IDENTITY).close_conversation(conversation);
         });
         add_action(deny_subscription_action);
 

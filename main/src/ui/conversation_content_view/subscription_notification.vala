@@ -74,8 +74,8 @@ public class SubscriptionNotitication : Object {
         });
         deny_button.clicked.connect(() => {
             app.activate_action("deny-subscription", conversation.id);
-            ((Dino.Ui.Application) app).window.conversation_view.chat_input.chat_text_view.text_view.grab_focus();
-            conversation_view.remove_notification(box);
+            stream_interactor.get_module(ConversationManager.IDENTITY).close_conversation(conversation);
+            // Do not remove box, otherwise if denying AND next chat below is also a subscription request, the popup to accept/deny do not appear!
         });
         box.append(new Label(_("This contact would like to add you to their contact list")) { margin_end=10 });
         box.append(accept_button);
