@@ -77,6 +77,10 @@ public class ConversationSelectorRow : ListBoxRow {
                 content_item_received(item);
             }
         });
+        var roster_item = stream_interactor.get_module(RosterManager.IDENTITY).get_roster_item(account, jid);
+        if (roster_item.subscription_requested && roster_item.subscription == Xmpp.Roster.Item.SUBSCRIPTION_FROM) {
+                Util.force_css(name_label, "label{color: rgb(4, 152, 138)}");
+        }
 
         last_content_item = stream_interactor.get_module(ContentItemStore.IDENTITY).get_latest(conversation);
 
